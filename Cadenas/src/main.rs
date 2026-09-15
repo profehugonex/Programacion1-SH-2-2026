@@ -109,6 +109,7 @@ fn mostrar_menu(c: &Cadena) {
     println!("║  3. Longitud                     ║");
     println!("║  4. Obtener carácter (posición)  ║");
     println!("║  5. Cantidad repeticiones (char) ║");
+    println!("║  6. Caracter + repetido          ║");
     println!("╠══════════════════════════════════╣");
     println!("║  Q. Salir                        ║");
     println!("╚══════════════════════════════════╝");
@@ -169,6 +170,14 @@ fn main() {
                         println!("  El caracter aparecer: {} vez/veces", cantidad);
                     }
                     None    => println!("  No ingresaste ningun caracter choquito."),
+                }
+            }
+            "6" => {
+                if c.obtener_longitud() == 0 {
+                    println!("La cadena esta vacia choquito.");
+                } else {
+                    let resultado = c.char_mas_repetido();
+                    println!("El caracter que mas se repite es: {}", resultado);
                 }
             }
 
