@@ -3,7 +3,7 @@ const N: usize= 100;
 
 struct Cadena {
     longitud: usize,
-    caracteres: [char; N],
+    caracteres: [char; N], //Arreglo
 }
 
 impl Cadena {
@@ -68,6 +68,53 @@ impl Cadena {
         max_char
     }
 
+    //Metodo para invertir la cadena.
+    fn invertir(&mut self) {
+        if self.longitud <= 1 {
+            return
+        }
+        let mut izq = 0;
+        let mut der = self.longitud - 1;
+        while izq < der {
+            let temp = self.caracteres[izq];
+            self.caracteres[izq] = self.caracteres[der];
+            self.caracteres[der] = temp;
+            izq += 1;
+            der -= 1;
+        }
+    }
+
+    //Metodo para contar vocales y consonantes
+    fn contar_vocales_consonantes(&self) -> (usize, usize) {
+        let mut vocal:usize = 0;
+        let mut consonante: usize = 0;
+        for i in 0..self.longitud {
+            let car = self.caracteres[i];
+            let letra = (car >= 'a' && car <= 'z') || (car >= 'A' && car <= 'Z');
+            if letra {
+                let esvocal = car == 'a' || car == 'e' || car == 'i' || car == 'o' || car == 'u';
+                if esvocal {
+                    vocal += 1;
+                } else {
+                    consonante += 1;
+                }
+            }
+        }
+        (vocal, consonante)
+    }
+
+    //Metodo para eliminar caracteres duplicados contiguos (consecutivos). Ej:
+    //aaabbbccdfd = abcdfd
+    fn eliminar_repetidos_consecutivos(&self) -> Cadena {
+        let mut cad = Cadena::new();
+        for i in 0..self.longitud {
+            if i == 0 || self.caracteres[i] != self.caracteres[i-1] {
+                cad.add_char(self.caracteres[i]);
+            }
+        }
+        cad
+    }
+
     fn limpiar(&mut self) {
         self.longitud = 0;
         self.caracteres = ['\0'; N];
@@ -109,7 +156,8 @@ fn mostrar_menu(c: &Cadena) {
     println!("║  3. Longitud                     ║");
     println!("║  4. Obtener carácter (posición)  ║");
     println!("║  5. Cantidad repeticiones (char) ║");
-    println!("║  6. Caracter + repetido          ║");
+    println!("║  6. Invertir cadena              ║");
+    println!("║  7. Nros. Vocales y Consonantes  ║");
     println!("╠══════════════════════════════════╣");
     println!("║  Q. Salir                        ║");
     println!("╚══════════════════════════════════╝");
@@ -122,7 +170,7 @@ fn main() {
     println!("  Cadenas - POO — Programación I   ");
     println!("════════════════════════════════════");
 
-    let mut c = Cadena::new(); //Creando la insancia de clase
+    let mut c = Cadena::new(); //Creando la instancia de clase
 
     loop {
         mostrar_menu(&c);
@@ -172,12 +220,24 @@ fn main() {
                     None    => println!("  No ingresaste ningun caracter choquito."),
                 }
             }
+
             "6" => {
                 if c.obtener_longitud() == 0 {
-                    println!("La cadena esta vacia choquito.");
+                    println!("La cadena esta vacia");
                 } else {
-                    let resultado = c.char_mas_repetido();
-                    println!("El caracter que mas se repite es: {}", resultado);
+                    c.invertir();
+                    println!("La cadena invertida es: ");
+                    c.mostrar();
+                }
+            }
+
+            "7" => {
+                if c.obtener_longitud() == 0 {
+                    println!("La cadena esta vacia");
+                } else {
+                    let (vocal, consonante) = c.contar_vocales_consonantes();
+                    println!("El nro de vocales, es: {}", vocal);
+                    println!("El nro de consonantes es: {}", consonante);
                 }
             }
 
