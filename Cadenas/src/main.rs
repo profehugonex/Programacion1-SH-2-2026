@@ -115,6 +115,30 @@ impl Cadena {
         cad
     }
 
+    //Metodo para eliminar un caracter de una posicion dada.
+    fn eliminar_car(&mut self, p:usize) {
+        if p > 0 && p <= self.longitud {
+            let pos = p-1;
+            for i in pos..self.longitud-1 {
+                self.caracteres[i] = self.caracteres[i+1];
+            }
+            self.longitud = self.longitud-1;
+        }
+    }
+
+    //Metodo para obtener una subcadena, indicando el inicio y fin:
+    //Ej: Hola como va -> inicio = 3 fin = 9 => la como
+    fn subcadena(&self, inicio:usize, fin:usize) -> Cadena {
+        let mut subcad = Cadena::new();
+        if inicio < 1 && fin > self.longitud && inicio > fin {
+            return subcad;
+        }
+        for i in (inicio-1)..fin {
+            subcad.add_char(self.caracteres[i]);
+        }
+        subcad
+    }
+
     fn limpiar(&mut self) {
         self.longitud = 0;
         self.caracteres = ['\0'; N];
@@ -158,6 +182,8 @@ fn mostrar_menu(c: &Cadena) {
     println!("║  5. Cantidad repeticiones (char) ║");
     println!("║  6. Invertir cadena              ║");
     println!("║  7. Nros. Vocales y Consonantes  ║");
+    println!("║  8. Eliminar caracter (pos)      ║");
+    println!("║  9. Subcadena                    ║");
     println!("╠══════════════════════════════════╣");
     println!("║  Q. Salir                        ║");
     println!("╚══════════════════════════════════╝");
@@ -238,6 +264,48 @@ fn main() {
                     let (vocal, consonante) = c.contar_vocales_consonantes();
                     println!("El nro de vocales, es: {}", vocal);
                     println!("El nro de consonantes es: {}", consonante);
+                }
+            }
+
+            "8" => {
+                if c.obtener_longitud() == 0 {
+                    println!("La cadena esta vacia");
+                } else {
+                    println!("Ingresa la posicion a eliminar: ");
+                    match leer_numero() {
+                        Some(pos) if pos > 0 && pos <= c.obtener_longitud() => {
+                            c.eliminar_car(pos);
+                            println!("Resultado de la nueva cadena: ");
+                            c.mostrar();
+                        }Some(_) => println!("Posicion fuera de rango"),
+                        None => println!("Invalido"),
+                    }
+                }
+            }
+
+            "9" => {
+                if c.obtener_longitud() == 0 {
+                    println!("La cadena esta vacia");
+                } else {
+                    println!("Ingresa la posicion de inicio: ");
+                    match leer_numero() {
+                        Some(inicio) if inicio > 0 && inicio <= c.obtener_longitud() => {
+                            println!("Ingres la posicion del fin: ");
+                            match leer_numero() {
+                                Some(fin) if fin >= inicio && fin <= c.obtener_longitud() => {
+                                    let subca = c.subcadena(inicio, fin);
+                                    println!("La Subcadena entre las posiciones: [{}-{}] es: ", inicio, fin);
+                                    subca.mostrar();
+                                    let long = subca.longitud;
+                                    println!("La longitud de la nueva cadena es: {}", long);
+                            }
+                            Some(_) => println!("Fin invalido"),
+                            None => println!("Posicion invalida"),
+                        }
+                    }
+                    Some(_) => println!("Inicio fuera de rango"),
+                        None => println!("Posicion Invalida"),
+                    }
                 }
             }
 
