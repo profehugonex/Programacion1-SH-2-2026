@@ -141,7 +141,38 @@ impl Vectores {
     }
 
 
+    //Metodo de ordenamiento: QickSort (Ordenamiento Rápido)
+    fn quick_sort(&mut self){
+        if self.dimension <= 1 { return }
+        self.quicksort_rango(0,self.dimension-1);
+    }
 
+    fn quicksort_rango(&mut self, izq:usize, der:usize){
+        if izq >= der { return; }
+
+        let pivote_pos = self.particionar(izq, der);
+        if pivote_pos > 0 {
+            self.quicksort_rango(izq, pivote_pos-1);
+        }
+        self.quicksort_rango(pivote_pos+1, der);
+    }
+
+    fn particionar(&mut self, izq:usize, der:usize) -> usize{
+        let pivote = self.elemento[der];
+        let mut i = izq;
+        for j in izq..der{
+            if self.elemento[j] <= pivote{
+                let temp = self.elemento[i];
+                self.elemento[i] = self.elemento[j];
+                self.elemento[j] = temp;
+                i += 1;
+            }
+        }
+        let temp = self.elemento[i];
+        self.elemento[i] = self.elemento[der];
+        self.elemento[der] = temp;
+        i
+    }
 
    /* fn escalera(&self) -> bool {
         //Metodo para devolver true o false, si es que existe una escalera en el vector.
