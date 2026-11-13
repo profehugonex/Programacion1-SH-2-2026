@@ -50,7 +50,7 @@ impl Juego {
     }
 
     pub fn actualizar(&mut self) {
-        // Intencionalmente vacío: enemigos quietos, sin balas.
+        // Aquí deben animar las naves enemigas y mover los disparos.
     }
 
     pub fn dibujar(&self) {
